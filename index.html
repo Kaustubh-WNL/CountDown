@@ -53,21 +53,29 @@
 <body>
 
 <div class="timer-box">
-    <div class="timer-title">Time Remaining to Pack Everything</div>
+    <div class="timer-title">Race</div>
 
     <div class="countdown-row">
+        <div class="unit">
+            <div class="value" id="weeks">0</div>
+            <div class="label">weeks</div>
+        </div>
+
         <div class="unit">
             <div class="value" id="days">0</div>
             <div class="label">days</div>
         </div>
+
         <div class="unit">
             <div class="value" id="hours">0</div>
             <div class="label">hours</div>
         </div>
+
         <div class="unit">
             <div class="value" id="minutes">0</div>
             <div class="label">minutes</div>
         </div>
+
         <div class="unit">
             <div class="value" id="seconds">0</div>
             <div class="label">seconds</div>
@@ -83,19 +91,30 @@
         const diff = targetDate - now;
 
         if (diff <= 0) {
-            document.getElementById("days").textContent = 0;
-            document.getElementById("hours").textContent = 0;
-            document.getElementById("minutes").textContent = 0;
-            document.getElementById("seconds").textContent = 0;
+            ["weeks", "days", "hours", "minutes", "seconds"].forEach(id => {
+                document.getElementById(id).textContent = 0;
+            });
             clearInterval(timer);
             return;
         }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % 86400000) / 3600000);
-        const minutes = Math.floor((diff % 3600000) / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
+        let remaining = diff;
 
+        const weeks = Math.floor(remaining / (1000 * 60 * 60 * 24 * 7));
+        remaining %= (1000 * 60 * 60 * 24 * 7);
+
+        const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+        remaining %= (1000 * 60 * 60 * 24);
+
+        const hours = Math.floor(remaining / (1000 * 60 * 60));
+        remaining %= (1000 * 60 * 60);
+
+        const minutes = Math.floor(remaining / (1000 * 60));
+        remaining %= (1000 * 60);
+
+        const seconds = Math.floor(remaining / 1000);
+
+        document.getElementById("weeks").textContent = weeks;
         document.getElementById("days").textContent = days;
         document.getElementById("hours").textContent = hours;
         document.getElementById("minutes").textContent = minutes;
